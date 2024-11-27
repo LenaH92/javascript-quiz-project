@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function showQuestion() {
+
     // If the quiz has ended, show the results
     if (quiz.hasEnded()) {
       showResults();
@@ -95,28 +96,54 @@ document.addEventListener("DOMContentLoaded", () => {
     
 
     // YOUR CODE HERE:
-    //
+    questionContainer.innerText = question.text;
     // 1. Show the question
     // Update the inner text of the question container element and show the question text
 
     
     // 2. Update the green progress bar
-    // Update the green progress bar (div#progressBar) width so that it shows the percentage of questions answered
+    // Update the green progress bar (div#progressBar) width so that it shows the percentage of questions answered.
     
-    progressBar.style.width = `65%`; // This value is hardcoded as a placeholder
+    //let totalQuestion = quiz.getTotalQuestions ();
 
+    let percentage = ((quiz.currentQuestionIndex + 1) / questions.length) * 100
+
+    progressBar.style.width = `${percentage}%`;// This value is hardcoded as a placeholder
+    
 
 
     // 3. Update the question count text 
     // Update the question count (div#questionCount) show the current question out of total questions
     
-    questionCount.innerText = `Question 1 of 10`; //  This value is hardcoded as a placeholder
+    questionCount.innerText = `Question ${quiz.currentQuestionIndex + 1} of ${questions.length}`; //  This value is hardcoded as a placeholder
 
 
     
     // 4. Create and display new radio input element with a label for each choice.
+    const choicesContainer = document.getElementById('.choices');
+  
+  choices.forEach((choice) =>{
+  const radio = document.createElement('input');
+  radio.type = "radio";
+  radio.name = "choice";
+  radio.value = choice; 
+  
+  const label = document.createElement('label');
+  label.innerText = choice;
+  
+  const listItem = document.createElement('li');
+  
+  listItem.appendChild(radio);
+  listItem.appendChild(label);
+  choicesContainer.appendChild(listItem);
+});
+
+     
+ 
+
     // Loop through the current question `choices`.
       // For each choice create a new radio input with a label, and append it to the choice container.
+            
       // Each choice should be displayed as a radio input element with a label:
       /* 
           <input type="radio" name="choice" value="CHOICE TEXT HERE">
