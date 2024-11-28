@@ -58,9 +58,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /************  TIMER  ************/
-
   let timer;
+   function startQuizTimer () {
+ 
+  
+  timer = setInterval( () =>{
+  
+     quiz.timeRemaining -= 1;
+      const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+      const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+      timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+    
+      if (quiz.timeRemaining < 1) {
+      clearInterval(timer);
+      showResults();
+    }
+      }, 1000)          
+}
+startQuizTimer()
 
+  
+
+
+ 
 
   /************  EVENT LISTENERS  ************/
 
@@ -137,10 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
   listItem.appendChild(label);
   choicesContainer.appendChild(listItem);
 });
-
-     
- 
-
     // Loop through the current question `choices`.
       // For each choice create a new radio input with a label, and append it to the choice container.
             
@@ -160,43 +176,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
   
   function nextButtonHandler () {
-    let selectedAnswer; // A variable to store the selected answer value
-
-
-
+    let selectedAnswer // A variable to store the selected answer value
+    let newChoices = document.querySelectorAll('input[name="choice"]');
     // YOUR CODE HERE:
-    //document.querySelectorAll(const choiceElements = document.querySelectorAll('input[name="choice"]');)
+    newChoices.forEach((currentChoice) =>{
+    if(currentChoice.checked) {
+      selectedAnswer = currentChoice.value;
+    }
+    });
+    quiz.checkAnswer(selectedAnswer);
+    quiz.moveToNextQuestion();
+    showQuestion(); 
     
+ }
     // 1. Get all the choice elements. You can use the `document.querySelectorAll()` method.
-
-
     // 2. Loop through all the choice elements and check which one is selected
       // Hint: Radio input elements have a property `.checked` (e.g., `element.checked`).
       //  When a radio input gets selected the `.checked` property will be set to true.
       //  You can use check which choice was selected by checking if the `.checked` property is true.
-
-      
     // 3. If an answer is selected (`selectedAnswer`), check if it is correct and move to the next question
       // Check if selected answer is correct by calling the quiz method `checkAnswer()` with the selected answer.
       // Move to the next question by calling the quiz method `moveToNextQuestion()`.
       // Show the next question by calling the function `showQuestion()`.
-  }  
-
-
-
-
   function showResults() {
 
     // YOUR CODE HERE:
-    //
+    
     // 1. Hide the quiz view (div#quizView)
     quizView.style.display = "none";
-
+    
     // 2. Show the end view (div#endView)
     endView.style.display = "flex";
     
     // 3. Update the result container (div#result) inner text to show the number of correct answers out of total questions
-    resultContainer.innerText = `You scored 1 out of 1 correct answers!`; // This value is hardcoded as a placeholder
+    resultContainer.innerText = `You scored ${quiz.correctAnswers} out of ${questions.length} correct answers!`; // This value is hardcoded as a placeholder
+    clearInterval(timer);
+   
   }
-  
+  const goNextButton = document.getElementById('nextButton');
+     goNextButton.addEventListener('click', nextButtonHandler) 
+
+     const restartQuiz = document.getElementById('restartButton');
+     
+      restartQuiz.addEventListener('click', () =>{
+        quizView.style.display = "flex";
+        clearInterval(timer);
+        endView.style.display = "none";
+        startQuizTimer ();
+      quiz.currentQuestionIndex = 0;
+      quiz.timeRemaining = quiz.timeLimit;
+      console.log(quiz.timeRemaining);
+      console.log(quiz.timeLimit);
+      quiz.correctAnswers = 0;
+      quiz.moveToNextQuestion();
+      showQuestion() ;
+     } )
 });
+
+
