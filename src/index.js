@@ -120,9 +120,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     
     // 4. Create and display new radio input element with a label for each choice.
-    const choicesContainer = document.getElementById('.choices');
+  const choicesContainer = document.getElementById('choices');
   
-  choices.forEach((choice) =>{
+  question.choices.forEach((choice) =>{
   const radio = document.createElement('input');
   radio.type = "radio";
   radio.name = "choice";
@@ -165,7 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // YOUR CODE HERE:
-    //
+    //document.querySelectorAll(const choiceElements = document.querySelectorAll('input[name="choice"]');)
+    
     // 1. Get all the choice elements. You can use the `document.querySelectorAll()` method.
 
 
